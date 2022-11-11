@@ -1,0 +1,19 @@
+{
+  "name": "dom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "target": "es6",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle": "rollup -c"
+  },
+  "author": "mumwa <hy0903@yonsei.ac.kr>",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^3.2.5",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^4.8.4"
+  }
+}
