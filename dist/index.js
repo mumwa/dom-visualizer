@@ -259,18 +259,23 @@
           this.arr = [];
           this.level = 0;
           this.maxlevel = 0;
-          this.levelLength = [];
+          this.levelLength = [0];
       }
       push(node) {
           this.arr.push(node);
           ++this.level;
           if (this.level > this.maxlevel) {
               this.maxlevel = this.level;
+              this.levelLength[this.maxlevel - 1] = 0;
           }
-          if (!this.levelLength[this.level - 1]) {
-              this.levelLength[this.level - 1] = 0;
-          }
+          // console.log("배열", this.levelLength);
           ++this.levelLength[this.level - 1];
+          // console.log(
+          //   "추가 인덱스",
+          //   this.level - 1,
+          //   "값:",
+          //   this.levelLength[this.level - 1]
+          // );
       }
       pop() {
           if (this.level <= 0)
@@ -388,6 +393,7 @@
           case RenderKind$1.error:
               backgroundColor = "#e64545";
               element = "error";
+              alert(content);
               break;
       }
       (wrapper$1 === null || wrapper$1 === void 0 ? void 0 : wrapper$1.innerHTML)
@@ -424,22 +430,25 @@
   };
   function renderer(maxlevel, levelLength, document) {
       (wrapper$1 === null || wrapper$1 === void 0 ? void 0 : wrapper$1.innerHTML) ? (wrapper$1.innerHTML = "돔 트리") : "돔 트리";
-      ++maxlevel;
+      let toplevel = maxlevel;
+      let leftlevel = levelLength;
+      leftlevel[toplevel] = 0;
       function count(node) {
           const attributeNumber = Object.keys(node.attributes).length;
-          levelLength[node.level + 1] = levelLength[node.level + 1] + attributeNumber;
+          leftlevel[node.level + 1] = leftlevel[node.level + 1] + attributeNumber;
           for (let i = 0; i < node.children.length; i++) {
               count(node.children[i]);
           }
           return 0;
       }
       count(document);
-      const topBlock = 100 / (maxlevel + 1);
+      const topBlock = 100 / (toplevel + 1);
       let rowIndex; //길이보다 1 작아야함
-      (rowIndex = []).length = maxlevel + 1;
+      (rowIndex = []).length = toplevel + 1;
       rowIndex.fill(0);
+      console.log(toplevel, rowIndex, leftlevel);
       function render(parent, node) {
-          const leftBlock = 100 / levelLength[node.level];
+          const leftBlock = 100 / leftlevel[node.level];
           const top = topBlock * node.level + topBlock / 2;
           const left = rowIndex[node.level] * leftBlock + leftBlock / 2;
           renderingNode(node.level, rowIndex[node.level], top, left, node.kind, node.element);
@@ -453,7 +462,7 @@
           const attributeKeys = Object.keys(node.attributes);
           attributeKeys.forEach((key) => {
               const kind = key === "error" ? RenderKind$1.error : RenderKind$1.attribute;
-              const nextBlock = 100 / levelLength[node.level + 1];
+              const nextBlock = 100 / leftlevel[node.level + 1];
               renderingNode(node.level + 1, rowIndex[node.level + 1], topBlock * (node.level + 1) + topBlock / 2, rowIndex[node.level + 1] * nextBlock + nextBlock / 2, kind, `${key}:${node.attributes[key]}`);
               if (parent !== null) {
                   renderingLine(topBlock * (node.level + 1) + topBlock / 2, rowIndex[node.level + 1] * nextBlock + nextBlock / 2, top, left);
@@ -485,6 +494,7 @@
               }
               else {
                   wrapper.style.backgroundColor = "#ffffff";
+                  console.log(parsedHTML);
                   renderer(parsedHTML.maxlevel, parsedHTML.levelLength, parsedHTML.document);
               }
           }

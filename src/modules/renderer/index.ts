@@ -32,6 +32,7 @@ const renderingNode = (
     case RenderKind.error:
       backgroundColor = "#e64545";
       element = "error";
+      alert(content);
       break;
   }
   wrapper?.innerHTML
@@ -77,11 +78,14 @@ const renderingLine = (
 function renderer(maxlevel: number, levelLength: number[], document: Node) {
   wrapper?.innerHTML ? (wrapper.innerHTML = "돔 트리") : "돔 트리";
 
-  ++maxlevel;
+  let toplevel: number = maxlevel;
+  let leftlevel: number[] = levelLength;
+
+  leftlevel[toplevel] = 0;
 
   function count(node: Node) {
     const attributeNumber: number = Object.keys(node.attributes).length;
-    levelLength[node.level + 1] = levelLength[node.level + 1] + attributeNumber;
+    leftlevel[node.level + 1] = leftlevel[node.level + 1] + attributeNumber;
     for (let i = 0; i < node.children.length; i++) {
       count(node.children[i]);
     }
@@ -90,13 +94,15 @@ function renderer(maxlevel: number, levelLength: number[], document: Node) {
 
   count(document);
 
-  const topBlock = 100 / (maxlevel + 1);
+  const topBlock = 100 / (toplevel + 1);
   let rowIndex: number[]; //길이보다 1 작아야함
-  (rowIndex = []).length = maxlevel + 1;
+  (rowIndex = []).length = toplevel + 1;
   rowIndex.fill(0);
 
+  console.log(toplevel, rowIndex, leftlevel);
+
   function render(parent: any, node: Node) {
-    const leftBlock = 100 / levelLength[node.level];
+    const leftBlock = 100 / leftlevel[node.level];
 
     const top: number = topBlock * node.level + topBlock / 2;
     const left: number = rowIndex[node.level] * leftBlock + leftBlock / 2;
@@ -123,7 +129,7 @@ function renderer(maxlevel: number, levelLength: number[], document: Node) {
     attributeKeys.forEach((key) => {
       const kind = key === "error" ? RenderKind.error : RenderKind.attribute;
 
-      const nextBlock = 100 / levelLength[node.level + 1];
+      const nextBlock = 100 / leftlevel[node.level + 1];
       renderingNode(
         node.level + 1,
         rowIndex[node.level + 1],

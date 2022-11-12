@@ -21,6 +21,7 @@ submit?.addEventListener("click", () => {
         wrapper.style.backgroundColor = "#e64545";
       } else {
         wrapper.style.backgroundColor = "#ffffff";
+        console.log(parsedHTML);
         renderer(
           parsedHTML.maxlevel,
           parsedHTML.levelLength,

@@ -9,7 +9,7 @@ class Stack {
     this.arr = [];
     this.level = 0;
     this.maxlevel = 0;
-    this.levelLength = [];
+    this.levelLength = [0];
   }
 
   push(node: Node) {
@@ -17,11 +17,18 @@ class Stack {
     ++this.level;
     if (this.level > this.maxlevel) {
       this.maxlevel = this.level;
+      this.levelLength[this.maxlevel - 1] = 0;
     }
-    if (!this.levelLength[this.level - 1]) {
-      this.levelLength[this.level - 1] = 0;
-    }
+
+    // console.log("배열", this.levelLength);
+
     ++this.levelLength[this.level - 1];
+    // console.log(
+    //   "추가 인덱스",
+    //   this.level - 1,
+    //   "값:",
+    //   this.levelLength[this.level - 1]
+    // );
   }
   pop() {
     if (this.level <= 0) return null;
