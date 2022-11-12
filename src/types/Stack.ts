@@ -20,15 +20,7 @@ class Stack {
       this.levelLength[this.maxlevel - 1] = 0;
     }
 
-    // console.log("배열", this.levelLength);
-
     ++this.levelLength[this.level - 1];
-    // console.log(
-    //   "추가 인덱스",
-    //   this.level - 1,
-    //   "값:",
-    //   this.levelLength[this.level - 1]
-    // );
   }
   pop() {
     if (this.level <= 0) return null;

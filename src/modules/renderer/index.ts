@@ -99,8 +99,6 @@ function renderer(maxlevel: number, levelLength: number[], document: Node) {
   (rowIndex = []).length = toplevel + 1;
   rowIndex.fill(0);
 
-  console.log(toplevel, rowIndex, leftlevel);
-
   function render(parent: any, node: Node) {
     const leftBlock = 100 / leftlevel[node.level];
 
